@@ -7,7 +7,7 @@
 	<head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Hydrogen &mdash; A free HTML5 Template </title>
+	<title>画廊</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="keywords" content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive" />
 
@@ -32,6 +32,12 @@
 	<link rel="stylesheet" href="css/salvattore.css">
 	<!-- Theme Style -->
 	<link rel="stylesheet" href="css/style.css">
+
+	<!-- jQuery -->
+	<script src="js/jquery.min.js"></script>
+
+
+
 	<!-- Modernizr JS -->
 	<script src="js/modernizr-2.6.2.min.js"></script>
 	<!-- FOR IE9 below -->
@@ -42,56 +48,95 @@
 	</head>
 	<body>
 
-
-
-
-
-
 	<div id="fh5co-main">
 		<div class="container">
-							<img src="http://www.005.tv/uploads/allimg/190212/61-1Z2121203409E.jpg" alt="Title">
-							<br \>
-							\u6bcf\u65e5p\u7ad9\u672c\u5b50\u56fe\u63a8\u8350201902012\u671f
+
 			<div class="row">
-
-        <div id="fh5co-board" data-columns>
-
+				<!-- <img src="http://www.005.tv/uploads/allimg/190212/61-1Z2121203409E.jpg" alt="Title">
+				<br \>
+				<p>2月图第二期</p>
+				<div id="fh5co-board" data-columns>
         	<div class="item">
         		<div class="animate-box">
 	        		<a href="http://www.005.tv/uploads/allimg/190201/55-1Z201110155M8.jpg" class="image-popup fh5co-board-img" title="123"><img src="http://www.005.tv/uploads/allimg/190201/55-1Z201110155M8.jpg" alt="Free HTML5 Bootstrap template"></a>
         		</div>
-        		<div class="fh5co-desc">Lorem ipsum dolor sit amet.</div>
+        		<div class="fh5co-desc">来自:moeimg 编号:76765.</div>
         	</div>
-        	<div class="item">
-        		<div class="animate-box">
-	        		<a href="http://www.005.tv/uploads/allimg/190201/55-1Z201110222446.jpg" class="image-popup fh5co-board-img"><img src="http://www.005.tv/uploads/allimg/190201/55-1Z201110222446.jpg" alt="Free HTML5 Bootstrap template"></a>
-	        		<div class="fh5co-desc">Veniam voluptatum voluptas.</div>
-        		</div>
-        	</div>
-        	<div class="item">
-        		<div class="animate-box">
-	        		<a href="http://www.005.tv/uploads/allimg/190201/55-1Z20111024R00.jpg" class="image-popup fh5co-board-img"><img src="http://www.005.tv/uploads/allimg/190201/55-1Z20111024R00.jpg" alt="Free HTML5 Bootstrap template"></a>
-	        		<div class="fh5co-desc">Adipisci consequuntur.</div>
-        		</div>
-        	</div>
-					<div class="item">
-        		<div class="animate-box">
-	        		<a href="http://www.005.tv/uploads/allimg/190201/55-1Z201110315259.jpg" class="image-popup fh5co-board-img"><img src="http://www.005.tv/uploads/allimg/190201/55-1Z201110315259.jpg" alt="未找到图片"></a>
-	        		<div class="fh5co-desc">Adipisci consequuntur.</div>
-        		</div>
-        	</div>
-        </div>
+        </div> -->
+
       </div>
     </div>
 	</div>
+	<script>
+		/// <summary>
+		/// 格式化字符串
+		/// </summary>
+		String.prototype.format = function () {
+				var regexp = /\{(\d+)\}/g;
+				var args = arguments;
+				var result = this.replace(regexp, function (m, i, o, n) {
+						return args[i];
+				});
+				return result.replace('%', "\\");
+		}
+
+	var URL="https://rabtman.com/api/v2/acgclub/pictures";
+
+	var putHtml=`
+	<center>
+	<div data-columns>
+	<img src="{0}" alt="{1}">
+	<br >
+	<h3>{2}</h3>
+	</div>
+	</center>
+	<br >
+	<div id="fh5co-board" data-columns>
+		{3}
+	</div>
+<hr>
+	`;
+	var putItemHtml=`<div class="item">
+		<div class="animate-box">
+			<a href="{0}" class="image-popup fh5co-board-img"><img src="{0}" alt="{1}"></a>
+		</div>
+		<div class="fh5co-desc">{2}</div>
+	</div>
+	`;
+
+	var faildImage="图片被吃了T^T";
+
+$.ajax({
+			type: "get",
+			url: URL,
+			cache:false,
+			async:false,
+			dataType: "json",
+ 			success: function(data){
+				if(data.message=="请求成功")
+				{
+					$.each(data.data,function(idx,item){
+						var type=item.type;
+						var sort=item.sort;
+						var tempItem="";
+						var urlarry=item.imgUrls;
+						for (var i = 0; i < urlarry.length; i++) {
+							tempItem+=putItemHtml.format(urlarry[i],faildImage,"来自:"+type+" 编号:"+sort+".");
+						}
+						$(".row").append(putHtml.format(item.thumbnail,faildImage,item.title,tempItem));
+					});
+				}
+      }
+});
+
+	</script>
 
 
-	<!-- jQuery -->
-	<script src="js/jquery.min.js"></script>
 	<!-- jQuery Easing -->
 	<script src="js/jquery.easing.1.3.js"></script>
 	<!-- Bootstrap -->
 	<script src="js/bootstrap.min.js"></script>
+
 	<!-- Waypoints -->
 	<script src="js/jquery.waypoints.min.js"></script>
 	<!-- Magnific Popup -->
@@ -102,7 +147,11 @@
 	<script src="js/main.js"></script>
 
 
-
+	<footer  style="margin-top:10px">
+		<center>
+			<p>© Yfavor Responsive. All rights reserved.</p>
+		</center>
+	 </footer>
 
 	</body>
 </html>
