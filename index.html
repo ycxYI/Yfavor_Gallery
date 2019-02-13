@@ -47,9 +47,11 @@
 
 	</head>
 	<body>
-<div class="head">
+		<table style="margin:10px;">
+			<tr><td style="width:100%;"><input id="txt_seach"  class="form-control" type="text"    placeholder="请输入图片名称"></td>
+				<td ><button id="btn_seach" style="margin-bottom:0px;" type="button" class="btn btn-primary" data-loading-text="搜索中...">搜索图片</button></td></tr>
+		</table>
 
-</div>
 	<div id="fh5co-main">
 		<div class="container">
 
@@ -70,6 +72,23 @@
 				});
 				return result.replace('%', "\\");
 		}
+		/// <summary>
+		/// 获取链接参数
+		/// </summary>
+		function getQueryString(name) {
+		        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+		        var r = window.location.search.substr(1).match(reg);
+		        if (r != null)
+						{
+							if(r.indexOf('%')>-1)
+							return unescape(r[2]);
+							else
+							return r[2];
+						}
+		        return null;
+		    }
+
+
 
 	var URL="https://rabtman.com/api/v2/acgclub/pictures";
 
@@ -77,8 +96,10 @@
 	<center>
 	<div data-columns>
 	<img src="{0}" alt="{1}">
+	</div>
 	<br >
-	<h3>{2}</h3>
+	<div data-columns>
+	<h5>{2}</h5>
 	</div>
 	</center>
 	<br >
@@ -97,28 +118,44 @@
 
 	var faildImage="图片被吃了T^T";
 
-$.ajax({
-			type: "get",
-			url: URL,
-			cache:false,
-			async:false,
-			dataType: "json",
- 			success: function(data){
-				if(data.message=="请求成功")
-				{
-					$.each(data.data,function(idx,item){
-						var type=item.type;
-						var sort=item.sort;
-						var tempItem="";
-						var urlarry=item.imgUrls;
-						for (var i = 0; i < urlarry.length; i++) {
-							tempItem+=putItemHtml.format(urlarry[i],faildImage,"来自:"+type+" 编号:"+sort+".");
-						}
-						$(".row").append(putHtml.format(item.thumbnail,faildImage,item.title,tempItem));
-					});
+function ResetImages(url) {
+	$.ajax({
+				type: "get",
+				url: url,
+				cache:false,
+				async:false,
+				dataType: "json",
+				success: function(data){
+					if(data.message=="请求成功")
+					{
+						$.each(data.data,function(idx,item){
+							//if(idx>5) return true;
+							var type=item.type;
+							var sort=item.sort;
+							var tempItem="";
+							var urlarry=item.imgUrls;
+							for (var i = 0; i < urlarry.length; i++) {
+								tempItem+=putItemHtml.format(urlarry[i],faildImage,"来自:"+type+" 编号:"+sort+".");
+							}
+							$(".row").append(putHtml.format(item.thumbnail,faildImage,item.title,tempItem));
+						});
+					}
 				}
-      }
-});
+	});
+}
+var query=getQueryString("query");
+if(query==null||query.replace(' ','')=='')
+ResetImages(URL);
+else {
+	let queryUrl="https://rabtman.com/api/v2/acgclub/category/gamersky/pictures?query="+query;
+	ResetImages(queryUrl);
+}
+
+$(function() {
+        $("#btn_seach").click(function(){
+            location.href="?query="+encodeURI($("#txt_seach").val());
+        });
+    });
 
 	</script>
 
