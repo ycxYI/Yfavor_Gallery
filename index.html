@@ -7,7 +7,7 @@
 	<head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>画廊</title>
+	<title>二次画廊 - YfavorGallery</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="keywords" content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive" />
 
@@ -181,7 +181,11 @@ function ResetImages(url) {
 }
 
 $(function() {
-
+        if(sort!=null)
+				{
+					$("#btn_up").css('display', 'none');
+					$("#btn_next").css('display', 'none');
+				}
         $("#btn_seach").click(function(){
             location.href="?query="+encodeURI($("#txt_seach").val());
         });
