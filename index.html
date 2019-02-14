@@ -44,11 +44,7 @@
 	<!--[if lt IE 9]>
 	<script src="js/respond.min.js"></script>
 	<![endif]-->
-<style>
-	a :hover{
-		text-decoration: none;
-	}
-</style>
+
 	</head>
 	<body>
 		<table style="margin:10px;">
@@ -117,7 +113,6 @@ var URL="https://rabtman.com/api/v2/acgclub/{0}pictures";
 	<div id="fh5co-board" data-columns>
 		{0}
 	</div>
-<hr>
 	`;
 	var putItemHtml=`<div class="item">
 		<div class="animate-box">
@@ -172,8 +167,8 @@ function ResetImages(url) {
 							else {
 								var tempItem="";
 								var queryChar=window.location.href+"?"
-								if(window.location.href.indexOf("?")>-1) queryChar=window.location.href+"&&";
-								tempItem+=putItemHtml.format(item.thumbnail,faildImage,"来自:"+typeItem+" 编号:"+sortItem+". "+titleImageHtml.format(queryChar+"&sort="+sortItem) );
+								if(window.location.href.indexOf("?")>-1) queryChar=window.location.href+"&";
+								tempItem+=putItemHtml.format(item.thumbnail,faildImage,"来自:"+typeItem+" 编号:"+sortItem+" "+item.title+". "+titleImageHtml.format(queryChar+"sort="+sortItem) );
 								$(".row").append(putHtml.format(tempItem));
 							}
 						});
@@ -186,6 +181,9 @@ $(function() {
         $("#btn_seach").click(function(){
             location.href="?query="+encodeURI($("#txt_seach").val());
         });
+				$("a").hover(function(){
+				    $("a").css("text-decoration","none");
+				});
     });
 
 	</script>
@@ -204,6 +202,7 @@ $(function() {
 	<script src="js/salvattore.min.js"></script>
 	<!-- Main JS -->
 	<script src="js/main.js"></script>
+
 
 
 	<footer  style="margin-top:10px">
