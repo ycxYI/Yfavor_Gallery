@@ -70,7 +70,7 @@
 				var result = this.replace(regexp, function (m, i, o, n) {
 						return args[i];
 				});
-				return result.replace('%', "\\");
+				return result;
 		}
 		/// <summary>
 		/// 获取链接参数
@@ -80,9 +80,9 @@
 		        var r = window.location.search.substr(1).match(reg);
 		        if (r != null)
 						{
-							if(r.indexOf('%')>-1)
-							return unescape(r[2]);
-							else
+							// if(r.indexOf('%')>-1)
+							// return unescape(r[2]);
+							// else
 							return r[2];
 						}
 		        return null;
@@ -127,6 +127,10 @@ var sort=getQueryString("sort");
 var titleImageHtml=sort==null?"<a href='{0}'>查看图包>></a>":"";
 var query=getQueryString("query");
 var type=getQueryString("type");
+
+var offset=getQueryString("offset");
+var limit=getQueryString("limit");
+
 var url_new=URL;
 if(type!=null&&(type=="moeimg"||type=="cosplay"||type=="gamersky"))
  url_new=url_new.format(URL_TYPE.format(type));
