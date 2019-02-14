@@ -33,11 +33,22 @@
 	<!-- Theme Style -->
 	<link rel="stylesheet" href="css/style.css">
 
+	<style type="text/css">
+			.goTop >img{
+					width: 50px;
+					height: 50px;
+					cursor: pointer;
+			}
+			.goTop{
+					position: fixed;
+					right : 20px;
+					bottom : 20px;
+			}
+	</style>
 	<!-- jQuery -->
 	<script src="js/jquery.min.js"></script>
 
-
-
+<script src="js/GoToTop.js"></script>
 
 	<!-- FOR IE9 below -->
 	<!--[if lt IE 9]>
@@ -57,6 +68,7 @@
 	<button type="button" style="margin-left:0px;margin-right:0px;padding-left:15px;padding-right:15px;" class="btn btn-default btn-sm">cosplay</button>
 	<button type="button" style="margin-left:0px;padding-left:15px;padding-right:15px;" class="btn btn-default btn-sm">gamersky</button>
 </div>
+<div class="goTop" id="js-go_top"><img src="image/icon_top.png" alt="回到顶部图片"></div>
 	<div id="fh5co-main">
 		<div class="container">
 			<div class="row">
@@ -180,6 +192,21 @@ function ResetImages(url) {
 	});
 }
 
+//TOP
+$('#js-go_top').gotoTop({
+		offset : 500, //距离顶部的位置
+		speed : 300, //移动到顶部的速度
+		/*     iconSpeed : 300, //icon动画样式的速度*/
+		animationShow : {
+				'transform' : 'translate(0,0)',
+				'transition': 'transform .5s ease-in-out'
+		}, //icon动画样式显示时
+		animationHide : {
+				'transform' : 'translate(80px,0)',
+				'transition': 'transform .5s ease-in-out'
+		} //icon动画样式隐藏时
+});
+
 $(function() {
         if(sort!=null)
 				{
@@ -256,6 +283,7 @@ $(function() {
 	<script src="js/salvattore.min.js"></script>
 	<!-- Main JS -->
 	<script src="js/main.js"></script>
+
 
 
 
