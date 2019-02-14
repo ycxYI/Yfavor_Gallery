@@ -38,8 +38,7 @@
 
 
 
-	<!-- Modernizr JS -->
-	<script src="js/modernizr-2.6.2.min.js"></script>
+
 	<!-- FOR IE9 below -->
 	<!--[if lt IE 9]>
 	<script src="js/respond.min.js"></script>
@@ -48,13 +47,20 @@
 	</head>
 	<body>
 		<table style="margin:10px;">
-			<tr><td style="width:100%;"><input id="txt_seach"  class="form-control" type="text"    placeholder="请输入图片名称"></td>
-				<td ><button id="btn_seach" style="margin-bottom:0px;" type="button" class="btn btn-primary">搜索图片</button></td></tr>
+			<tr><td colspan="2"><h2><a href="javascript:location.href=window.location.origin+window.location.pathname">YFAVOR-GALLERY</a></h2></td></tr>
+			<tr>
+				<td style="width:100%;"><input id="txt_seach"  class="form-control" type="text"  style="border-bottom-right-radius: 0;border-top-right-radius: 0;"   placeholder="请输入图片名称"></td>
+				<td ><button id="btn_seach" style="margin-bottom:0px;border-bottom-left-radius: 0;border-top-left-radius: 0;border" type="button" class="btn btn-primary">搜索图片</button></td></tr>
 		</table>
+		<div class="btn-group" style="margin:10px;">
+	<button type="button" style="margin-right:0px;" class="btn btn-default">moeimg</button>
+	<button type="button" style="margin-left:0px;margin-right:0px;" class="btn btn-default">cosplay</button>
+	<button type="button" style="margin-left:0px;" class="btn btn-default">gamersky</button>
+</div>
 	<div id="fh5co-main">
 		<div class="container">
 			<div class="row">
-				
+
       </div>
     </div>
 	</div>
@@ -120,7 +126,7 @@ var limit=getQueryString("limit");
 var url_new=URL;
 if(type!=null&&(type=="moeimg"||type=="cosplay"||type=="gamersky"))
  url_new=url_new.format(URL_TYPE.format(type));
-if(query!=null||offset!=null)
+if(query!=null||offset!=null||type!=null)
 {
 	let urlhead=url_new==URL?URL.format(""):url_new;
 	let queryUrl=urlhead;
@@ -128,6 +134,8 @@ if(query!=null||offset!=null)
 	 queryUrl+="?query="+query;
 	if(offset!=null)
 	 queryUrl+=(query!=null?"&":"?")+"offset="+offset;
+	if(type!=null)
+ 	 queryUrl+=(queryUrl.indexOf("?")>-1?"&":"?")+"type="+type;
 	ResetImages(queryUrl);
 }
 else
@@ -207,14 +215,30 @@ $(function() {
 						location.href=urlChar;
 					}
         });
+				$(".btn-group").on('click', 'button', function(event) {
+					event.preventDefault();
+					var roothref=window.location.href;
+					if(type!=null)
+					{
+						location.href=roothref.replace(/type=([^&]*)(&|$)/g,"type="+$(this).text()+"&");
+					}
+					else
+					{
+						var urlChar=window.location.href+"?type="+$(this).text();
+						if(window.location.href.indexOf("?")>-1) urlChar=window.location.href+"&type="+$(this).text();
+						location.href=urlChar;
+					}
+				});
 				$("a").hover(function(){
 				    $("a").css("text-decoration","none");
 				});
+				$("button").css("border-bottom","2px");
 });
 
 	</script>
 
-
+	<!-- Modernizr JS -->
+	<script src="js/modernizr-2.6.2.min.js"></script>
 	<!-- jQuery Easing -->
 	<script src="js/jquery.easing.1.3.js"></script>
 	<!-- Bootstrap -->
