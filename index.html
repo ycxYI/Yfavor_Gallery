@@ -44,7 +44,11 @@
 	<!--[if lt IE 9]>
 	<script src="js/respond.min.js"></script>
 	<![endif]-->
-
+<style>
+	a :hover{
+		text-decoration: none;
+	}
+</style>
 	</head>
 	<body>
 		<table style="margin:10px;">
@@ -90,21 +94,28 @@
 
 
 
-	var URL="https://rabtman.com/api/v2/acgclub/pictures";
+var URL_TYPE="category/{0}/";
+var URL="https://rabtman.com/api/v2/acgclub/{0}pictures";
 
+// 	var putHtml=`
+// 	<center>
+// 	<div data-columns>
+// 	<img src="{0}" alt="{1}">
+// 	</div>
+// 	<br >
+// 	<div data-columns>
+// 	<h5>{2}</h5>
+// 	</div>
+// 	</center>
+// 	<br >
+// 	<div id="fh5co-board" data-columns>
+// 		{3}
+// 	</div>
+// <hr>
+// 	`;
 	var putHtml=`
-	<center>
-	<div data-columns>
-	<img src="{0}" alt="{1}">
-	</div>
-	<br >
-	<div data-columns>
-	<h5>{2}</h5>
-	</div>
-	</center>
-	<br >
 	<div id="fh5co-board" data-columns>
-		{3}
+		{0}
 	</div>
 <hr>
 	`;
@@ -115,8 +126,22 @@
 		<div class="fh5co-desc">{2}</div>
 	</div>
 	`;
+var faildImage="图片被吃了T^T";
 
-	var faildImage="图片被吃了T^T";
+var sort=getQueryString("sort");
+var titleImageHtml=sort==null?"<a href='{0}'>查看图包>></a>":"";
+var query=getQueryString("query");
+var type=getQueryString("type");
+var url_new=URL;
+if(type!=null&&(type=="moeimg"||type=="cosplay"||type=="gamersky"))
+ url_new=url_new.format(URL_TYPE.format(type));
+if(query!=null)
+{
+	let queryUrl=(url_new==URL?URL.format(""):url_new)+"?query="+query;
+	ResetImages(queryUrl);
+}
+else
+ResetImages(URL.format(""));
 
 function ResetImages(url) {
 	$.ajax({
@@ -129,26 +154,32 @@ function ResetImages(url) {
 					if(data.message=="请求成功")
 					{
 						$.each(data.data,function(idx,item){
-							//if(idx>5) return true;
-							var type=item.type;
-							var sort=item.sort;
-							var tempItem="";
-							var urlarry=item.imgUrls;
-							for (var i = 0; i < urlarry.length; i++) {
-								tempItem+=putItemHtml.format(urlarry[i],faildImage,"来自:"+type+" 编号:"+sort+".");
+							//if(idx>5) return true;l
+							var typeItem=item.type;
+							var sortItem=item.sort;
+							if(sort!=null)
+							{
+								if(sortItem==sort)
+								{
+									var tempItem="";
+									var urlarry=item.imgUrls;
+									for (var i = 0; i < urlarry.length; i++) {
+										tempItem+=putItemHtml.format(urlarry[i],faildImage,"来自:"+typeItem+" 编号:"+sortItem+". " );
+									}
+									$(".row").append(putHtml.format(tempItem));
+								}
 							}
-							$(".row").append(putHtml.format(item.thumbnail,faildImage,item.title,tempItem));
+							else {
+								var tempItem="";
+								var queryChar=window.location.href+"?"
+								if(window.location.href.indexOf("?")>-1) queryChar=window.location.href+"&&";
+								tempItem+=putItemHtml.format(item.thumbnail,faildImage,"来自:"+typeItem+" 编号:"+sortItem+". "+titleImageHtml.format(queryChar+"&sort="+sortItem) );
+								$(".row").append(putHtml.format(tempItem));
+							}
 						});
 					}
 				}
 	});
-}
-var query=getQueryString("query");
-if(query==null||query.replace(' ','')=='')
-ResetImages(URL);
-else {
-	let queryUrl="https://rabtman.com/api/v2/acgclub/category/gamersky/pictures?query="+query;
-	ResetImages(queryUrl);
 }
 
 $(function() {
