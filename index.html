@@ -49,17 +49,21 @@
 	<body>
 		<table style="margin:10px;">
 			<tr><td style="width:100%;"><input id="txt_seach"  class="form-control" type="text"    placeholder="请输入图片名称"></td>
-				<td ><button id="btn_seach" style="margin-bottom:0px;" type="button" class="btn btn-primary" data-loading-text="搜索中...">搜索图片</button></td></tr>
+				<td ><button id="btn_seach" style="margin-bottom:0px;" type="button" class="btn btn-primary">搜索图片</button></td></tr>
 		</table>
-
 	<div id="fh5co-main">
 		<div class="container">
-
 			<div class="row">
-
+				
       </div>
     </div>
 	</div>
+	<center>
+	<table style="margin:10px;">
+		<tr><td style="width:50%;"><button id="btn_up" style="margin-bottom:0px;" type="button" class="btn btn-primary">上一页</button></td>
+			<td style="width:50%;"><button id="btn_next" style="margin-bottom:0px;" type="button" class="btn btn-primary">下一页</button></td></tr>
+	</table>
+</center>
 	<script>
 		/// <summary>
 		/// 格式化字符串
@@ -88,27 +92,9 @@
 		        return null;
 		    }
 
-
-
 var URL_TYPE="category/{0}/";
 var URL="https://rabtman.com/api/v2/acgclub/{0}pictures";
 
-// 	var putHtml=`
-// 	<center>
-// 	<div data-columns>
-// 	<img src="{0}" alt="{1}">
-// 	</div>
-// 	<br >
-// 	<div data-columns>
-// 	<h5>{2}</h5>
-// 	</div>
-// 	</center>
-// 	<br >
-// 	<div id="fh5co-board" data-columns>
-// 		{3}
-// 	</div>
-// <hr>
-// 	`;
 	var putHtml=`
 	<div id="fh5co-board" data-columns>
 		{0}
@@ -122,7 +108,7 @@ var URL="https://rabtman.com/api/v2/acgclub/{0}pictures";
 	</div>
 	`;
 var faildImage="图片被吃了T^T";
-
+var token="eWZhdm9y";
 var sort=getQueryString("sort");
 var titleImageHtml=sort==null?"<a href='{0}'>查看图包>></a>":"";
 var query=getQueryString("query");
@@ -134,9 +120,14 @@ var limit=getQueryString("limit");
 var url_new=URL;
 if(type!=null&&(type=="moeimg"||type=="cosplay"||type=="gamersky"))
  url_new=url_new.format(URL_TYPE.format(type));
-if(query!=null)
+if(query!=null||offset!=null)
 {
-	let queryUrl=(url_new==URL?URL.format(""):url_new)+"?query="+query;
+	let urlhead=url_new==URL?URL.format(""):url_new;
+	let queryUrl=urlhead;
+	if(query!=null)
+	 queryUrl+="?query="+query;
+	if(offset!=null)
+	 queryUrl+=(query!=null?"&":"?")+"offset="+offset;
 	ResetImages(queryUrl);
 }
 else
@@ -182,13 +173,44 @@ function ResetImages(url) {
 }
 
 $(function() {
+
         $("#btn_seach").click(function(){
             location.href="?query="+encodeURI($("#txt_seach").val());
+        });
+				$("#btn_up").click(function(){
+					var roothref=window.location.href;
+					if(offset!=null)
+					{
+						var index=1;
+						var reg = new RegExp("(^|&)offset=([^&]*)(&|$)", "i");
+		        var r = window.location.search.substr(1).match(reg);
+						if(r[2]==index) return;
+						index=(parseInt(r[2])-1);
+						location.href=roothref.replace(/offset=([^&]*)(&|$)/g,"offset="+index+"&");
+					}
+        });
+				$("#btn_next").click(function(){
+					var roothref=window.location.href;
+					if(offset!=null)
+					{
+						var index=1;
+						var reg = new RegExp("(^|&)offset=([^&]*)(&|$)", "i");
+						var r = window.location.search.substr(1).match(reg);
+						if(r[2]==index) return;
+						index=(parseInt(r[2])+1);
+						location.href=roothref.replace(/offset=([^&]*)(&|$)/g,"offset="+index+"&");
+					}
+					else
+					{
+						var urlChar=window.location.href+"?offset=2"
+						if(window.location.href.indexOf("?")>-1) urlChar=window.location.href+"&offset=2";
+						location.href=urlChar;
+					}
         });
 				$("a").hover(function(){
 				    $("a").css("text-decoration","none");
 				});
-    });
+});
 
 	</script>
 
