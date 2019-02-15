@@ -234,7 +234,7 @@ $(function() {
 					$("#btn_next").css('display', 'none');
 				}
         $("#btn_seach").click(function(){
-            location.href="?query="+encodeURI($("#txt_seach").val());
+            location.href=window.location.origin+window.location.pathname+"?query="+encodeURI($("#txt_seach").val());
         });
 				$("#btn_up").click(function(){
 					var roothref=window.location.href;
@@ -286,7 +286,6 @@ $(function() {
 				$("a").hover(function(){
 				    $("a").css("text-decoration","none");
 				});
-				$("button").css("border-bottom","2px");
 });
 
 	</script>
