@@ -1,3 +1,29 @@
+/// <summary>
+/// 格式化字符串
+/// </summary>
+String.prototype.format = function () {
+    var regexp = /\{(\d+)\}/g;
+    var args = arguments;
+    var result = this.replace(regexp, function (m, i, o, n) {
+        return args[i];
+    });
+    return result;
+}
+/// <summary>
+/// 获取链接参数
+/// </summary>
+function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null)
+        {
+          // if(r.indexOf('%')>-1)
+          // return unescape(r[2]);
+          // else
+          return r[2];
+        }
+        return null;
+    }
 
 var URL_TYPE="category/{0}/";
 var URL="https://rabtman.com/api/v2/acgclub/{0}pictures";
@@ -95,33 +121,6 @@ animationHide : {
     'transition': 'transform .5s ease-in-out'
 } //icon动画样式隐藏时
 });
-
-/// <summary>
-/// 格式化字符串
-/// </summary>
-String.prototype.format = function () {
-    var regexp = /\{(\d+)\}/g;
-    var args = arguments;
-    var result = this.replace(regexp, function (m, i, o, n) {
-        return args[i];
-    });
-    return result;
-}
-/// <summary>
-/// 获取链接参数
-/// </summary>
-function getQueryString(name) {
-        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-        var r = window.location.search.substr(1).match(reg);
-        if (r != null)
-        {
-          // if(r.indexOf('%')>-1)
-          // return unescape(r[2]);
-          // else
-          return r[2];
-        }
-        return null;
-    }
 
 $(function() {
     if(sort!=null)
