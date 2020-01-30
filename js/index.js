@@ -43,7 +43,7 @@ var putItemHtml=`<div class="item">
 var faildImage="图片被吃了T^T";
 var token="eWZhdm9y";
 var sort=getQueryString("sort");
-var titleImageHtml=sort==null?"<a href='{0}'>查看图包>></a>":"";
+var titleImageHtml=sort==null?"<a href='{0}'>查看图包</a>":"";
 var query=getQueryString("query");
 var type=getQueryString("type");
 
@@ -68,6 +68,7 @@ ResetImages(queryUrl);
 else
 ResetImages(URL.format(""));
 
+//重获api
 function ResetImages(url) {
 $.ajax({
     type: "get",
@@ -107,29 +108,36 @@ $.ajax({
 });
 }
 
-//TOP
-$('#js-go_top').gotoTop({
-offset : 500, //距离顶部的位置
-speed : 300, //移动到顶部的速度
-/*     iconSpeed : 300, //icon动画样式的速度*/
-animationShow : {
-    'transform' : 'translate(0,0)',
-    'transition': 'transform .5s ease-in-out'
-}, //icon动画样式显示时
-animationHide : {
-    'transform' : 'translate(80px,0)',
-    'transition': 'transform .5s ease-in-out'
-} //icon动画样式隐藏时
-});
 
+
+//初始化
 $(function() {
+
+  //TOP
+  $('#js-go_top').gotoTop({
+  offset : 500, //距离顶部的位置
+  speed : 300, //移动到顶部的速度
+  /*     iconSpeed : 300, //icon动画样式的速度*/
+  animationShow : {
+      'transform' : 'translate(0,0)',
+      'transition': 'transform .5s ease-in-out'
+  }, //icon动画样式显示时
+  animationHide : {
+      'transform' : 'translate(80px,0)',
+      'transition': 'transform .5s ease-in-out'
+  } //icon动画样式隐藏时
+  });
+
+    let defaultUrl=window.location.origin+window.location.pathname;
+    $("#btn_back").css('display', 'none');
     if(sort!=null)
     {
       $("#btn_up").css('display', 'none');
       $("#btn_next").css('display', 'none');
+      $("#btn_back").css('display', '');
     }
     $("#btn_seach").click(function(){
-        location.href=window.location.origin+window.location.pathname+"?query="+encodeURI($("#txt_seach").val());
+        location.href=defaultUrl+"?query="+encodeURI($("#txt_seach").val());
     });
     $("#btn_up").click(function(){
       var roothref=window.location.href;
@@ -161,22 +169,27 @@ $(function() {
         location.href=urlChar;
       }
     });
+    $("#btn_back").click(function(){
+      window.history.back(-1);
+    });
     $("#btn_home").click(function(){
-        location.href=window.location.origin+window.location.pathname;
+        location.href=defaultUrl;
     });
     $(".btn-group").on('click', 'button', function(event) {
       event.preventDefault();
-      var roothref=window.location.href;
-      if(type!=null)
-      {
-        location.href=roothref.replace(/type=([^&]*)(&|$)/g,"type="+$(this).text()+"&");
-      }
-      else
-      {
-        var urlChar=window.location.href+"?type="+$(this).text();
-        if(window.location.href.indexOf("?")>-1) urlChar=window.location.href+"&type="+$(this).text();
-        location.href=urlChar;
-      }
+      //此处无需转换,直接从首页开始
+      // var roothref=window.location.href;
+      // if(type!=null)
+      // {
+      //   location.href=roothref.replace(/type=([^&]*)(&|$)/g,"type="+$(this).text()+"&");
+      // }
+      // else
+      // {
+      //   var urlChar=window.location.href+"?type="+$(this).text();
+      //   if(window.location.href.indexOf("?")>-1) urlChar=window.location.href+"&type="+$(this).text();
+      //   location.href=urlChar;
+      // }
+      location.href=defaultUrl+"?type="+$(this).text();
     });
     $("a").hover(function(){
         $("a").css("text-decoration","none");
